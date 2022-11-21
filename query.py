@@ -155,5 +155,6 @@ if __name__=="__main__":
         print(lprob, ppl)
     if total_tokens ==0:
         sys.exit(0)
+        
     total_ppl=10**-(total_lprob/total_tokens)
     print("Total:",total_lprob,total_ppl)
