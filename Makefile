@@ -1,22 +1,9 @@
-#OPENMP_OPTIONS ?= -fopenmp
-MPICC = mpiCC
 CXX = g++
 OPTIMIZATION_DEBUG = -O3 -g
-#-O0 -g
-OMP_OPT = -fopenmp  -pthread   
-# -D_GLIBCXX_PARALLEL
-OPTIONS			 = -std=c++0x 
-# -D_WITH_BIAS
-# -D_TIMEIT 
-# -D_DEBUG
+OPTIONS			 = -std=c++0x
 
 LDLIBS			 = -O3 
-# LM_LIB			= -lm
 COMPILER_OPTIONS =
-#STXXL_COMPILER_OPTIONS += $(OPENMP_OPTIONS)
-#STXXL_COMPILER_OPTIONS += -DSORT_OPTIMAL_PREFETCHING
-#STXXL_COMPILER_OPTIONS += -std=c++0x
-#STXXL_COMPILER_OPTIONS += -ggdb
 COMPILER_OPTIONS += $(OPTIONS)
 COMPILER_OPTIONS += $(OPTIMIZATION_DEBUG)
 
@@ -28,31 +15,22 @@ LINKER_OPTIONS =  $(LDLIBS)
 
 .PHONY: all
 
-all: ng-count wng-pen-count
-# pcg-glove
-#pdict-w2v.mpi clean-voc exclude-voc limit-voc bin2text text2bin g2w2v
+all: ng-count 
+
 
 ###############################################################################
 
 ONAMES_NGCOUNT	= 	count\
 			anyoption
-				
-ONAMES_PNGCOUNT	= 	count-pens\
-			anyoption
 
 mk_OFILES    = $(addsuffix .o,$(1))
-mk_OMP_FILES    = $(addsuffix .omp.o,$(1))
 
-# OFILES_NGCOUNT	     = $(call mk_OMP_FILES,$(ONAMES_NGCOUNT))
 OFILES_NGCOUNT	     = $(call mk_OFILES,$(ONAMES_NGCOUNT))
-OFILES_PNGCOUNT	     = $(call mk_OFILES,$(ONAMES_PNGCOUNT))
+
 
 
 ng-count: Makefile $(OFILES_NGCOUNT)
 	${CXX} $(OFILES_NGCOUNT) -o $@ ${LINKER_OPTIONS} 
-	
-wng-pen-count: Makefile $(OFILES_PNGCOUNT)
-	${CXX} $(OFILES_PNGCOUNT) -o $@ ${LINKER_OPTIONS} 
 	
 %.o: %.cpp Makefile
 	${CXX} -c -o $@ $< ${COMPILER_OPTIONS}
